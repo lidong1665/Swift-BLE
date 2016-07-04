@@ -16,7 +16,7 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
     //设备名
     var DEVICENAME:String = "BLE-EMP-Ui"
     //特征名
-    var CHARACTERISTIC:String = "CD20"
+    var CHARACTERISTIC:String = "2AF1"
     //发送获取数据的指令
     var SECRETKEY:String = "938E0400080410"
     var getbytes :[UInt8]    = [0x93, 0x8e, 0x04, 0x00, 0x08, 0x04, 0x10]
