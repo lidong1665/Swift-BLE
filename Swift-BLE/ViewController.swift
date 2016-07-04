@@ -20,6 +20,11 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
     //发送获取数据的指令
     var SECRETKEY:String = "938E0400080410"
     var getbytes :[UInt8]    = [0x93, 0x8e, 0x04, 0x00, 0x08, 0x04, 0x10]
+    /// 存储最终拼到一起的结果
+    var result:String = ""
+    
+    var lable:UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         myCentralManager = CBCentralManager()
@@ -28,7 +33,7 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
         let  open:UIButton = UIButton()
         open.backgroundColor = UIColor.blueColor()
         //设置按钮的位置和大小
-        open.frame = CGRectMake(80, 180, 150, 44)
+        open.frame = CGRectMake(80, 80, 150, 44)
         //设置按钮的文字
         open.setTitle("打开", forState: .Normal)
         //设置按钮的点击事件
@@ -40,7 +45,7 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
         let  open1:UIButton = UIButton()
         open1.backgroundColor = UIColor.blueColor()
         //设置按钮的位置和大小
-        open1.frame = CGRectMake(80, 280, 150, 44)
+        open1.frame = CGRectMake(80, 150, 150, 44)
         //设置按钮的文字
         open1.setTitle("发送读取数据指令", forState: .Normal)
         //设置按钮的点击事件
@@ -48,13 +53,31 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
         open1.tag = 20
         self.view.addSubview(open1)
         
+        let rect = CGRectMake(10, 220, 280, 30)
+        lable = UILabel(frame: rect)
+        lable.text = "无数据"
+        let font = UIFont(name: "宋体",size: 12)
+        lable.font = font
+        //设置文字的阴影颜色
+        lable.shadowColor = UIColor.lightGrayColor()
+        //设置标签文字的阴影在横向和纵向的偏移距离
+        lable.shadowOffset = CGSizeMake(2,2)
+        //设置文字的对其的方式
+        lable.textAlignment = NSTextAlignment.Center
+        //设置标签文字的颜色
+        lable.textColor = UIColor.purpleColor()//紫色
+        //设置标签的背景颜色为黄色
+        lable.backgroundColor = UIColor.yellowColor()
         
+        self.view.addSubview(lable)
+
         // Do any additional setup after loading the view, typically from a nib.
     }
     
     
     func buttonTag(btn:UIButton) {
-               switch btn.tag {
+    
+        switch btn.tag {
         case 10:
             print("扫描设备。。。。 ");
             myCentralManager.scanForPeripheralsWithServices(nil, options: nil)
@@ -125,6 +148,7 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
         print("-----centralManagerDidUpdateState----------")
+        print(central.state)
     }
     
     func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
@@ -243,29 +267,29 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
      - parameter characteristic: <#characteristic description#>
      - parameter error:          <#error description#>
      */
-    
+
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         print("----didUpdateValueForCharacteristic---")
         
-                if  characteristic.UUID.UUIDString == "2AF0"  {
+        if  characteristic.UUID.UUIDString == "2AF0"  {
             let data:NSData = characteristic.value!
             print(data)
-            //关于把NSData转16进制 还没有做完
+            let  d  = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(data.bytes), count: data.length))
+            print(d)
+            
+            let s:String =  HexUtil.encodeToString(d)
+            if s != "00" {
+                result += s
+                print(result )
+                print(result.characters.count )
+            }
+            
+            if result.characters.count == 38 {
+                lable.text = result
+            }
             
         }
     }
-    /**
-     将NSData转换为String
-     
-     - parameter data: <#data description#>
-     
-     - returns: <#return value description#>
-     */
-    func tranferString(data:NSData) -> String {
-        var string:String =  String()
-       
-
-        return string
-    }
+    
 }
 
