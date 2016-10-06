@@ -31,43 +31,43 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
         myCentralManager.delegate = self
         
         let  open:UIButton = UIButton()
-        open.backgroundColor = UIColor.blueColor()
+        open.backgroundColor = UIColor.blue
         //设置按钮的位置和大小
-        open.frame = CGRectMake(80, 80, 150, 44)
+        open.frame = CGRect(x: 80, y: 80, width: 150, height: 44)
         //设置按钮的文字
-        open.setTitle("打开", forState: .Normal)
+        open.setTitle("打开", for: UIControlState())
         //设置按钮的点击事件
-        open.addTarget(self, action: #selector(ViewController.buttonTag(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        open.addTarget(self, action: #selector(ViewController.buttonTag(_:)), for: UIControlEvents.touchUpInside)
         open.tag = 10
         self.view.addSubview(open)
         
         
         let  open1:UIButton = UIButton()
-        open1.backgroundColor = UIColor.blueColor()
+        open1.backgroundColor = UIColor.blue
         //设置按钮的位置和大小
-        open1.frame = CGRectMake(80, 150, 150, 44)
+        open1.frame = CGRect(x: 80, y: 150, width: 150, height: 44)
         //设置按钮的文字
-        open1.setTitle("发送读取数据指令", forState: .Normal)
+        open1.setTitle("发送读取数据指令", for: UIControlState())
         //设置按钮的点击事件
-        open1.addTarget(self, action: #selector(ViewController.buttonTag(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        open1.addTarget(self, action: #selector(ViewController.buttonTag(_:)), for: UIControlEvents.touchUpInside)
         open1.tag = 20
         self.view.addSubview(open1)
         
-        let rect = CGRectMake(10, 220, 280, 30)
+        let rect = CGRect(x: 10, y: 220, width: 280, height: 30)
         lable = UILabel(frame: rect)
         lable.text = "无数据"
         let font = UIFont(name: "宋体",size: 12)
         lable.font = font
         //设置文字的阴影颜色
-        lable.shadowColor = UIColor.lightGrayColor()
+        lable.shadowColor = UIColor.lightGray
         //设置标签文字的阴影在横向和纵向的偏移距离
-        lable.shadowOffset = CGSizeMake(2,2)
+        lable.shadowOffset = CGSize(width: 2,height: 2)
         //设置文字的对其的方式
-        lable.textAlignment = NSTextAlignment.Center
+        lable.textAlignment = NSTextAlignment.center
         //设置标签文字的颜色
-        lable.textColor = UIColor.purpleColor()//紫色
+        lable.textColor = UIColor.purple//紫色
         //设置标签的背景颜色为黄色
-        lable.backgroundColor = UIColor.yellowColor()
+        lable.backgroundColor = UIColor.yellow
         
         self.view.addSubview(lable)
 
@@ -75,12 +75,12 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
     }
     
     
-    func buttonTag(btn:UIButton) {
+    func buttonTag(_ btn:UIButton) {
     
         switch btn.tag {
         case 10:
             print("扫描设备。。。。 ");
-            myCentralManager.scanForPeripheralsWithServices(nil, options: nil)
+            myCentralManager.scanForPeripherals(withServices: nil, options: nil)
             break
         case 20:
             //向设备发送指令
@@ -96,11 +96,11 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
     /**
      发送指令到设备
      */
-    func writeToPeripheral(bytes:[UInt8]) {
+    func writeToPeripheral(_ bytes:[UInt8]) {
         if writeCharacteristic != nil {
-            let data1:NSData = dataWithHexstring(bytes)
+            let data1:Data = dataWithHexstring(bytes)
             
-            self.myPeripheral.writeValue(data1, forCharacteristic: writeCharacteristic, type: CBCharacteristicWriteType.WithResponse)
+            self.myPeripheral.writeValue(data1, for: writeCharacteristic, type: CBCharacteristicWriteType.withResponse)
             
         } else{
         
@@ -116,8 +116,8 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
      - returns: <#return value description#>
      */
     
-    func dataWithHexstring(bytes:[UInt8]) -> NSData {
-        let data = NSData(bytes: bytes, length: bytes.count)
+    func dataWithHexstring(_ bytes:[UInt8]) -> Data {
+        let data = Data(bytes: UnsafePointer<UInt8>(bytes), count: bytes.count)
         return data
     }
     
@@ -133,12 +133,12 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
      - parameter peripheral: <#peripheral description#>
      - parameter error:      <#error description#>
      */
-    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         switch (central.state) {
-        case .PoweredOn:
+        case .poweredOn:
             print("蓝牙已打开, 请扫描外设!");
             break;
-        case .PoweredOff:
+        case .poweredOff:
             print("蓝牙关闭，请先打开蓝牙");
         default:
             break;
@@ -147,34 +147,34 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
     
     func isBluetoothAvailable() -> Bool {
         if #available(iOS 10.0, *) {
-            return myCentralManager.state == CBManagerState.PoweredOn
+            return myCentralManager.state == CBManagerState.poweredOn
         } else {
-            return myCentralManager.state  == .PoweredOn
+            return myCentralManager.state  == .poweredOn
         }
     }
     
-    func centralManagerDidUpdateState(central: CBCentralManager) {
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
         print("-----centralManagerDidUpdateState----------")
         print(central.state)
     }
     
-    func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("--didFailToConnectPeripheral--")
     }
     //发现设备
-    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print("--didDiscoverPeripheral-")
         if peripheral.name == DEVICENAME{
             self.myPeripheral = peripheral;
             self.myCentralManager = central;
-            central.connectPeripheral(self.myPeripheral, options: nil)
+            central.connect(self.myPeripheral, options: nil)
             print(self.myPeripheral);
         }
         
     }
     
     //设备已经接成功
-    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("---------didConnectPeripheral-")
         print(central)
         print(peripheral)
@@ -186,7 +186,7 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
     }
     
     
-    func centralManager(central: CBCentralManager, willRestoreState dict: [String : AnyObject]) {
+    func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
         
         print("---------willRestoreState---------")
 
@@ -199,12 +199,12 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
      - parameter error:      <#error description#>
      */
     
-    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         print("---发现服务调用次方法-")
         
         for s in peripheral.services!{
-            peripheral.discoverCharacteristics(nil, forService: s)
-            print(s.UUID.UUIDString)
+            peripheral.discoverCharacteristics(nil, for: s)
+            print(s.uuid.uuidString)
         }
     }
     /**
@@ -214,19 +214,19 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
      - parameter service:    <#service description#>
      - parameter error:      <#error description#>
      */
-    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         print("----发现特征------")
         
         for c in service.characteristics! {
             
-            if c.UUID.UUIDString == "2AF0"{
-                print(c.UUID.UUIDString)
-                peripheral.setNotifyValue(true, forCharacteristic: c)
+            if c.uuid.uuidString == "2AF0"{
+                print(c.uuid.uuidString)
+                peripheral.setNotifyValue(true, for: c)
             }
             
             
-            if c.UUID.UUIDString == "2AF1"{
-                print(c.UUID.UUIDString)
+            if c.uuid.uuidString == "2AF1"{
+                print(c.uuid.uuidString)
                 self.writeCharacteristic = c
             }
         }
@@ -243,7 +243,7 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
      - parameter characteristic: <#characteristic description#>
      - parameter error:          <#error description#>
      */
-    func peripheral(peripheral: CBPeripheral, didWriteValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
        print("didWriteValueForCharacteristic")
     }
     
@@ -255,15 +255,15 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
      - parameter error:          <#error description#>
      */
     
-    func peripheral(peripheral: CBPeripheral, didUpdateNotificationStateForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         print("-----didUpdateNotificationStateForCharacteristic-----")
         if (error != nil) {
-            print(error?.code);
+            print(error?._code);
         }
         //Notification has started
         if(characteristic.isNotifying){
-            peripheral.readValueForCharacteristic(characteristic);
-           print(characteristic.UUID.UUIDString);
+            peripheral.readValue(for: characteristic);
+           print(characteristic.uuid.uuidString);
         }
     }
     
@@ -275,13 +275,13 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
      - parameter error:          <#error description#>
      */
 
-    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         print("----didUpdateValueForCharacteristic---")
         
-        if  characteristic.UUID.UUIDString == "2AF0"  {
-            let data:NSData = characteristic.value!
+        if  characteristic.uuid.uuidString == "2AF0"  {
+            let data:Data = characteristic.value!
             print(data)
-            let  d  = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(data.bytes), count: data.length))
+            let  d  = Array(UnsafeBufferPointer(start: (data as NSData).bytes.bindMemory(to: UInt8.self, capacity: data.count), count: data.count))
             print(d)
             
             let s:String =  HexUtil.encodeToString(d)
