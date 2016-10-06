@@ -135,16 +135,23 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
      */
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         switch (central.state) {
-        case CBCentralManagerState.PoweredOn:
+        case .PoweredOn:
             print("蓝牙已打开, 请扫描外设!");
             break;
-        case CBCentralManagerState.PoweredOff:
+        case .PoweredOff:
             print("蓝牙关闭，请先打开蓝牙");
         default:
             break;
         }
     }
     
+    func isBluetoothAvailable() -> Bool {
+        if #available(iOS 10.0, *) {
+            return myCentralManager.state == CBManagerState.PoweredOn
+        } else {
+            return myCentralManager.state  == .PoweredOn
+        }
+    }
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
         print("-----centralManagerDidUpdateState----------")
