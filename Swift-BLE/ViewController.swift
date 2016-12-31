@@ -258,7 +258,7 @@ class ViewController: UIViewController,CBCentralManagerDelegate,CBPeripheralDele
     func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
         print("-----didUpdateNotificationStateForCharacteristic-----")
         if (error != nil) {
-            print(error?._code);
+            print(error.customMirror);
         }
         //Notification has started
         if(characteristic.isNotifying){
