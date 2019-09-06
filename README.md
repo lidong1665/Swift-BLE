@@ -8,8 +8,8 @@
 
  - 案例的实现
 
-##1. 建立桥接文件
-1.1在用Swift使用OC中得类文件的时候，需要进行桥接，首先建一个.h的头文件。 
+## 1. 建立桥接文件
+### 1.1在用Swift使用OC中得类文件的时候，需要进行桥接，首先建一个.h的头文件。 
 注意：桥接文件的命名规则：项目名-Bridging-Header.Swift
 
 ```
@@ -23,11 +23,11 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 ```
 
-1.2 在Build-settings -> Swift Complier - Code Generaton —>Objective C Briding Herder中添加自己的桥接文件。 
+### 1.2 在Build-settings -> Swift Complier - Code Generaton —>Objective C Briding Herder中添加自己的桥接文件。 
 如下图：
 ![这里写图片描述](http://img.blog.csdn.net/20160704132842686)
 
-##2.案例的实现
+## 2.案例的实现
 
 首先，CoreBluetooth库文件为我们提供两个类CBCentralManagerDelegate,CBPeripheralDelegate ,是蓝牙操作的核心类。
 
@@ -35,7 +35,7 @@ CBCentralManagerDelegate 中心管理器的代理类
 
 CBPeripheralDelegate  外围设备的代理类
 
-####2.1创建CBCentralManager,设置代理
+### 2.1创建CBCentralManager,设置代理
 
 ```
 var  myCentralManager:CBCentralManager!
@@ -43,7 +43,7 @@ myCentralManager = CBCentralManager()
 myCentralManager.delegate = self
 
 ```
-####2.2启动扫描发现设备
+### 2.2启动扫描发现设备
 
 ```
 
@@ -74,7 +74,7 @@ print("扫描设备。。。。 ")         myCentralManager.scanForPeripheralsWi
     
    
 ```
-####2.3 发现设备后，连接设备，连接成功，关闭中心啊管理者的扫描，发现设备的服务，设置外围设备的代理
+### 2.3 发现设备后，连接设备，连接成功，关闭中心啊管理者的扫描，发现设备的服务，设置外围设备的代理
 
 ```
  //设备已经接成功
@@ -91,7 +91,7 @@ print("扫描设备。。。。 ")         myCentralManager.scanForPeripheralsWi
 
 ```
 
-####2.4 根据服务发现特征
+### 2.4 根据服务发现特征
 
 ```
  /**
@@ -138,7 +138,7 @@ print("扫描设备。。。。 ")         myCentralManager.scanForPeripheralsWi
 
 ```
 
-####2.5向设备发送指令，获取数据
+### 2.5向设备发送指令，获取数据
 
 ```
  /**
@@ -205,7 +205,7 @@ print("扫描设备。。。。 ")         myCentralManager.scanForPeripheralsWi
 
 ```
 
-####2.6 发送指令的方法
+### 2.6 发送指令的方法
 
 ```
     /**
@@ -237,7 +237,9 @@ print("扫描设备。。。。 ")         myCentralManager.scanForPeripheralsWi
     }
 ```
 
-总结：使用Swift开发IOS中蓝牙4.0的开发流程基本就是如上两大步骤，六小步骤，如果有不明白，可以联系我。
+### 总结
+
+使用Swift开发IOS中蓝牙4.0的开发流程基本就是如上两大步骤，六小步骤，如果有不明白，可以联系我。
 
 注意：蓝牙调试代码只能真机，模拟器是没效果的。
 
