@@ -9,7 +9,7 @@
  - 案例的实现
 
 ## 1. 建立桥接文件
-### 1.1在用Swift使用OC中得类文件的时候，需要进行桥接，首先建一个.h的头文件。 
+### 1.1 在用Swift使用OC中得类文件的时候，需要进行桥接，首先建一个.h的头文件。 
 注意：桥接文件的命名规则：项目名-Bridging-Header.Swift
 
 ```
@@ -35,7 +35,7 @@ CBCentralManagerDelegate 中心管理器的代理类
 
 CBPeripheralDelegate  外围设备的代理类
 
-### 2.1创建CBCentralManager,设置代理
+### 2.1 创建CBCentralManager,设置代理
 
 ```
 var  myCentralManager:CBCentralManager!
@@ -43,7 +43,7 @@ myCentralManager = CBCentralManager()
 myCentralManager.delegate = self
 
 ```
-### 2.2启动扫描发现设备
+### 2.2 启动扫描发现设备
 
 ```
 
@@ -138,7 +138,7 @@ print("扫描设备。。。。 ")         myCentralManager.scanForPeripheralsWi
 
 ```
 
-### 2.5向设备发送指令，获取数据
+### 2.5 向设备发送指令，获取数据
 
 ```
  /**
@@ -243,6 +243,6 @@ print("扫描设备。。。。 ")         myCentralManager.scanForPeripheralsWi
 
 注意：蓝牙调试代码只能真机，模拟器是没效果的。
 
-[代码地址 ：](https://github.com/lidong1665/Swift-BLE)
+[代码地址:https://github.com/lidong1665/Swift-BLE](https://github.com/lidong1665/Swift-BLE)
 
 ![截图](http://img.blog.csdn.net/20160704134747702)
